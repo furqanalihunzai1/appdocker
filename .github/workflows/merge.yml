@@ -1,0 +1,31 @@
+name: Merge Dev to Prod
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+
+    - name: Merge Dev to Prod
+      uses: actions/checkout@v2
+      with:
+        ref: prod
+        repository: ${{furqanalihunzai1/appdocker}}
+        path: prod
+    - name: Merge Dev Branch
+      run: |
+        git checkout prod
+        git merge dev
+    - name: Push Changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{secrets.TOKEN}}
+        branch: prod
+        force: true
